@@ -2,50 +2,46 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"strings"
 
 	"github.com/spf13/viper"
 )
 
 func main() {
-	mainViper := getMainConfig()
-	// specificViper := getEnvSpecificConfig()
 
-	fmt.Println(mainViper.GetInt("server.port"))
-	// fmt.Println(specificViper.GetString("db.url"))
+	fmt.Println("Set env variable SRV_DB_USER=testuser")
+	os.Setenv("SRV_DB_USER", "testuser")
 
-	// getEnvVariableConfig()
+	getMainConfig()
+	getEnvSpecificConfig()
+	getEnvVariableConfig()
 }
 
 func getEnvVariableConfig() *viper.Viper {
+	fmt.Println("\n======== Env Variable Config ========")
+
 	envVarViper := viper.New()
 	envVarViper.SetEnvPrefix("SRV")
-	// err := envVarViper.BindEnv("DB_USER")
-	// if err != nil { // Handle errors reading the config file
-	// 	panic(fmt.Errorf("fatal error config: %w", err))
-	// }
-
-	// fmt.Println(envVarViper.GetString("DB_USER"))
-
 	envVarViper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	envVarViper.AutomaticEnv()
 
-	fmt.Println(envVarViper.GetString("db.user"))
+	fmt.Printf("db.user=%v\n", envVarViper.GetString("db.user"))
 
 	return envVarViper
 }
 
 func getMainConfig() *viper.Viper {
+	fmt.Println("\n======== application.yaml + Env Variables + Unmarshal ========")
+
 	mainViper := viper.New()
 
 	mainViper.SetEnvPrefix("SRV")
 
-	fmt.Println(mainViper.GetString("DB_USER"))
-
 	mainViper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	mainViper.AutomaticEnv()
-
-	fmt.Println(mainViper.GetString("DB_USER"))
+	fmt.Printf("Env[DB_USER]=%v\n", mainViper.GetString("DB_USER"))
+	fmt.Printf("Env[db.user]=%v\n", mainViper.GetString("db.user"))
 
 	mainViper.SetConfigName("application")           // name of config file (without extension)
 	mainViper.SetConfigType("yaml")                  // REQUIRED if the config file does not have the extension in the name
@@ -57,18 +53,20 @@ func getMainConfig() *viper.Viper {
 		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
 
-	// fmt.Println(mainViper.GetInt("server.port"))
-	// fmt.Println(mainViper.GetString("app.default-base-currency"))
-	// fmt.Println(mainViper.GetString("db.url"))
+	fmt.Printf("server.port=%v\n", mainViper.GetInt("server.port"))
+	fmt.Printf("app.default-base-currency=%v\n", mainViper.GetString("app.default-base-currency"))
+	fmt.Printf("db.url=%v\n", mainViper.GetString("db.url"))
 
 	config := Config{}
 	mainViper.Unmarshal(&config)
-	fmt.Printf("%+v\n", config)
+	fmt.Printf("Unmarshal:\n%+v\n", config)
 
 	return mainViper
 }
 
 func getEnvSpecificConfig() *viper.Viper {
+	fmt.Println("\n======== application-sit.yaml ========")
+
 	envSpecificViper := viper.New()
 
 	envSpecificViper.SetConfigName("application-sit")
@@ -81,7 +79,7 @@ func getEnvSpecificConfig() *viper.Viper {
 		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
 
-	// fmt.Println(envSpecificViper.GetString("db.url"))
+	fmt.Printf("db.url=%v\n", envSpecificViper.GetString("db.url"))
 
 	return envSpecificViper
 }
