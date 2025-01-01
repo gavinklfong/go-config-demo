@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 
+	"example.com/config"
 	"github.com/spf13/viper"
 )
 
@@ -45,7 +46,7 @@ func getMainConfig() *viper.Viper {
 
 	mainViper.SetConfigName("application")           // name of config file (without extension)
 	mainViper.SetConfigType("yaml")                  // REQUIRED if the config file does not have the extension in the name
-	mainViper.AddConfigPath("./config")              // path to look for the config file in
+	mainViper.AddConfigPath("../config")             // path to look for the config file in
 	mainViper.AddConfigPath("/etc/app/forex/config") // call multiple times to add many search paths
 
 	err := mainViper.ReadInConfig() // Find and read the config file
@@ -57,7 +58,7 @@ func getMainConfig() *viper.Viper {
 	fmt.Printf("app.default-base-currency=%v\n", mainViper.GetString("app.default-base-currency"))
 	fmt.Printf("db.url=%v\n", mainViper.GetString("db.url"))
 
-	config := Config{}
+	config := config.Config{}
 	mainViper.Unmarshal(&config)
 	fmt.Printf("Unmarshal:\n%+v\n", config)
 
@@ -71,7 +72,7 @@ func getEnvSpecificConfig() *viper.Viper {
 
 	envSpecificViper.SetConfigName("application-sit")
 	envSpecificViper.SetConfigType("yaml")
-	envSpecificViper.AddConfigPath("./config")
+	envSpecificViper.AddConfigPath("../config")
 	envSpecificViper.AddConfigPath("/etc/app/forex/config")
 
 	err := envSpecificViper.ReadInConfig() // Find and read the config file
