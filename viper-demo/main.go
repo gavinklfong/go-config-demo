@@ -10,8 +10,8 @@ import (
 
 func main() {
 
-	fmt.Println("Set env variable SRV_DB_USER=testuser")
-	os.Setenv("SRV_DB_USER", "testuser")
+	fmt.Println("Set env variable SRV_DB_PASSWORD=NewPassword")
+	os.Setenv("SRV_DB_PASSWORD", "NewPassword")
 
 	getMainConfig()
 	getEnvSpecificConfig()
@@ -26,7 +26,7 @@ func getEnvVariableConfig() *viper.Viper {
 	envVarViper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	envVarViper.AutomaticEnv()
 
-	fmt.Printf("db.user=%v\n", envVarViper.GetString("db.user"))
+	fmt.Printf("db.password=%v\n", envVarViper.GetString("db.password"))
 
 	return envVarViper
 }
@@ -40,8 +40,8 @@ func getMainConfig() *viper.Viper {
 
 	mainViper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
 	mainViper.AutomaticEnv()
-	fmt.Printf("Env[DB_USER]=%v\n", mainViper.GetString("DB_USER"))
-	fmt.Printf("Env[db.user]=%v\n", mainViper.GetString("db.user"))
+	fmt.Printf("Env[DB_PASSWORD]=%v\n", mainViper.GetString("DB_PASSWORD"))
+	fmt.Printf("Env[db.password]=%v\n", mainViper.GetString("db.password"))
 
 	mainViper.SetConfigName("application")           // name of config file (without extension)
 	mainViper.SetConfigType("yaml")                  // REQUIRED if the config file does not have the extension in the name
