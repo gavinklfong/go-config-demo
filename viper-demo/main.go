@@ -5,7 +5,6 @@ import (
 	"os"
 	"strings"
 
-	"example.com/config"
 	"github.com/spf13/viper"
 )
 
@@ -58,7 +57,7 @@ func getMainConfig() *viper.Viper {
 	fmt.Printf("app.default-base-currency=%v\n", mainViper.GetString("app.default-base-currency"))
 	fmt.Printf("db.url=%v\n", mainViper.GetString("db.url"))
 
-	config := config.Config{}
+	config := Config{}
 	mainViper.Unmarshal(&config)
 	fmt.Printf("Unmarshal:\n%+v\n", config)
 

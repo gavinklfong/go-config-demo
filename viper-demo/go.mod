@@ -2,12 +2,7 @@ module example.com/go-viper-demo
 
 go 1.23.4
 
-replace example.com/config => ../config
-
-require (
-	example.com/config v0.0.0-00010101000000-000000000000
-	github.com/spf13/viper v1.19.0
-)
+require github.com/spf13/viper v1.19.0
 
 require (
 	github.com/fsnotify/fsnotify v1.7.0 // indirect
